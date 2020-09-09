@@ -52,12 +52,38 @@
 # 类需要支持__enter__(),__exit__()方法，这时__init__()方法只是进行初始化
 
 
-# 4.创建大量对象时节省内存的方法
-# __slots__,适用于简单的数据结构
-class Date:
-    __slots__ = ['year', 'month', 'day']
+# # 4.创建大量对象时节省内存的方法
+# # __slots__,适用于简单的数据结构
+# class Date:
+#     __slots__ = ['year', 'month', 'day']
+#
+#     def __init__(self, year, month, day):
+#         self.year = year
+#         self.month = month
+#         self.day = day
 
-    def __init__(self, year, month, day):
-        self.year = year
-        self.month = month
-        self.day = day
+# 5.property
+# 用途：在对象进行改变值之前进行类型检查
+# class Person(object):
+#     def __init__(self, first_name):
+#         self.__first_name = first_name  # 将变量私有化，这样即使是子类也不能访问；这里的变量必须和下面的方法名不一致，否则会出现循环
+#
+#     @property
+#     def first_name(self):
+#         return self.__first_name
+#
+#     @first_name.setter
+#     def first_name(self, value):
+#         if not isinstance(value, str):
+#             raise TypeError('Expected a string.')
+#         self.__first_name = value
+#
+#     @first_name.deleter
+#     def first_name(self):
+#         raise AttributeError('Can not delete attribute.')
+#
+#
+# a = Person('Guido')
+# print(a.first_name)
+# a.first_name = 43
+# del a.first_name
