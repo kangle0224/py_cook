@@ -63,7 +63,9 @@
 #         self.day = day
 
 # 5.property
-# 用途：在对象进行改变值之前进行类型检查
+# 用途：
+# 1.在对象进行改变值之前进行类型检查
+# 2.进行计算
 # class Person(object):
 #     def __init__(self, first_name):
 #         self.__first_name = first_name  # 将变量私有化，这样即使是子类也不能访问；这里的变量必须和下面的方法名不一致，否则会出现循环
@@ -82,8 +84,13 @@
 #     def first_name(self):
 #         raise AttributeError('Can not delete attribute.')
 #
+#     @property
+#     def get_sum(self):
+#         return 1 + 2
+#
 #
 # a = Person('Guido')
 # print(a.first_name)
+# print(a.get_sum)
 # a.first_name = 43
 # del a.first_name
