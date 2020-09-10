@@ -68,20 +68,20 @@
 # 2.进行计算
 # class Person(object):
 #     def __init__(self, first_name):
-#         self.__first_name = first_name  # 将变量私有化，这样即使是子类也不能访问；这里的变量必须和下面的方法名不一致，否则会出现循环
+#         self.first_name = first_name  # 将变量私有化，这样即使是子类也不能访问；这里的变量必须和下面的方法名不一致，否则会出现循环
 #
 #     @property
-#     def first_name(self):
-#         return self.__first_name
+#     def name(self):
+#         return self.first_name
 #
-#     @first_name.setter
-#     def first_name(self, value):
+#     @name.setter
+#     def name(self, value):
 #         if not isinstance(value, str):
 #             raise TypeError('Expected a string.')
-#         self.__first_name = value
+#         self.first_name = value
 #
-#     @first_name.deleter
-#     def first_name(self):
+#     @name.deleter
+#     def name(self):
 #         raise AttributeError('Can not delete attribute.')
 #
 #     @property
@@ -90,7 +90,48 @@
 #
 #
 # a = Person('Guido')
-# print(a.first_name)
+# print(a.name)
 # print(a.get_sum)
-# a.first_name = 43
-# del a.first_name
+# a.name = 43
+# del a.name
+
+
+# 6. 创建新的类或实例属性
+# 类型检查
+# 描述器，这个很重要，可以实现@classmethod,@staticmethod,@property,__slots___
+# 当程序中有很多重复代码的时候描述器就很有用了
+# class Integer:
+#     def __init__(self, name):
+#         self.name = name
+#
+#     def __get__(self, instance, cls):
+#         if instance is None:
+#             return self
+#         else:
+#             return instance.__dict__[self.name]
+#
+#     def __set__(self, instance, value):
+#         if not isinstance(value, int):
+#             raise TypeError('Expected an int')
+#         instance.__dict__[self.name] = value
+#
+#     def __delete__(self, instance):
+#         del instance.__dict__[self.name]
+#
+#
+# class Point:
+#     x = Integer('x')
+#     y = Integer('y')
+#
+#     def __init__(self, x, y):
+#         self.x = x
+#         self.y = y
+
+# p = Point(2, 3)
+# print(p.x)
+# print(p.y)
+# print(Point.x) #<__main__.Integer object at 0x00000117E5014460>
+# p.y = 5
+# print(p.y)
+# p.x = 2.3  # 报错，会进行类型检查
+
