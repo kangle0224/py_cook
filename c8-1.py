@@ -135,3 +135,88 @@
 # print(p.y)
 # p.x = 2.3  # 报错，会进行类型检查
 
+# 7. 使用延迟计算属性
+# 你想将一个只读属性定义成一个 property，并且只在访问的时候才会计算结果。但
+# 是一旦被访问后，你希望结果值被缓存起来，不用每次都去计算。
+# 7.1这个版本会被更改
+# class lazyproperty:
+#     def __init__(self, func):
+#         self.func = func
+#
+#     def __get__(self, instance, cls):
+#         if instance is None:
+#             return self
+#         else:
+#             value = self.func(instance)
+#             setattr(instance, self.func.__name__, value)  # 将计算结果存储在实例的字典中，以后不需要计算了
+#             return value
+#
+#
+# import math
+#
+#
+# class Circle:
+#     def __init__(self, radius):
+#         self.radius = radius
+#
+#     @lazyproperty
+#     def area(self):
+#         print('computing area')
+#         return math.pi * self.radius ** 2
+#
+#     @lazyproperty
+#     def perimeter(self):
+#         print('computing perimeter')
+#         return 2 * math.pi * self.radius
+#
+#
+# c = Circle(4)
+# print(c.radius)
+# print(c.area)
+# print(c.area)  # 不打印computing...
+# print(c.perimeter)
+# print(c.perimeter)  # 不打印computing...
+# # 结果被更改
+# c.area = 4
+# print(c.area)
+
+# 7.2不会被更改，但不高效了
+# def lazyproperty(func):
+#     name = '_lazy_' + func.__name__
+#
+#     @property
+#     def lazy(self):
+#         if hasattr(self, name):
+#             return getattr(self, name)
+#         else:
+#             value = func(self)
+#             setattr(self, name, value)
+#             return value
+#
+#     return lazy
+#
+#
+# import math
+#
+#
+# class Circle:
+#     def __init__(self, radius):
+#         self.radius = radius
+#
+#     @lazyproperty
+#     def area(self):
+#         print('computing area')
+#         return math.pi * self.radius ** 2
+#
+#     @lazyproperty
+#     def perimeter(self):
+#         print('computing perimeter')
+#         return 2 * math.pi * self.radius
+#
+#
+# c = Circle(4)
+# print(c.area)
+# print(c.area)
+# print(c.perimeter)
+# print(c.perimeter)
+# c.area = 5  # 报错了，不允许修改，但这种方法也有缺点，具体看书
