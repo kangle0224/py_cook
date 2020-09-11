@@ -220,3 +220,92 @@
 # print(c.perimeter)
 # print(c.perimeter)
 # c.area = 5  # 报错了，不允许修改，但这种方法也有缺点，具体看书
+
+
+# 8.简化数据结构的初始化
+# 不用写那么多行的初始化定义了
+# 先定义基类
+import math
+
+
+# class BaseStruct:
+#     _fields = []
+#
+#     def __init__(self, *args):
+#         if len(args) != len(self._fields):
+#             raise TypeError('Expected {} arguments'.format(len(self._fields)))
+#         for name, value in zip(self._fields, args):
+#             setattr(self, name, value)
+#
+#
+# class Stock(BaseStruct):
+#     _fields = ['name', 'shares', 'price']
+#
+#
+# class Point(BaseStruct):
+#     _fields = ['x', 'y']
+#
+#
+# class Circle(BaseStruct):
+#     _fields = ['radius']
+#
+#
+# s = Stock('alex', 50, 91)
+# p = Point(2, 3)
+# c = Circle(5)
+# c = Circle(5, 6) # 报错，参数多了
+
+# 关键字参数
+# class BaseStruct:
+#     _fields = []
+#
+#     def __init__(self, *args, **kwargs):
+#         if len(args) > len(self._fields):
+#             raise TypeError('Expected {} arguments'.format(len(self._fields)))
+#         # 处理所有的位置参数
+#         for name, value in zip(self._fields, args):
+#             setattr(self, name, value)
+#         # 处理关键字参数
+#         print(self._fields[len(args):])
+#         for name in self._fields[len(args):]:
+#             setattr(self, name, kwargs.pop(name))
+#
+#         # 检查其他参数
+#         if kwargs:
+#             raise TypeError('Invalid arguments: {}'.format(','.join(kwargs)))
+#
+#
+# class Stock1(BaseStruct):
+#     _fields = ['name', 'shares', 'price']
+#
+#
+# s1 = Stock1('alex', 4, 5)
+# s2 = Stock1('alex', 4, price=26)
+# s3 = Stock1('alex', shares=4, price=26)
+# s4 = Stock1('alex', 5, shares=4, price=26)  # 此处会随机报shares或者price，因为字典是乱序的
+
+# 将不再_fields中的名称加入到属性中
+# class Structure3:
+#     _fields = []
+#
+#     def __init__(self, *args, **kwargs):
+#         if len(args) != len(self._fields):
+#             raise TypeError('Expected {} arguments'.format(len(self._fields)))
+#
+#         for name, value in zip(self._fields, args):
+#             setattr(self, name, value)
+#
+#         extra_args = kwargs.keys() - self._fields
+#         for name in extra_args:
+#             setattr(self, name, kwargs.pop(name))
+#         if kwargs:
+#             raise TypeError('Duplicate values for {}'.format(','.join(kwargs)))
+#
+#
+# class Stock(Structure3):
+#     _fields = ['name', 'shares', 'price']
+#
+#
+# s1 = Stock('alex', 4, 5)
+# s2 = Stock('alex', 4, 5, date='2020/9/11')
+# print(s2.__dict__)
